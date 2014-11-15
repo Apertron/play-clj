@@ -15,6 +15,6 @@
                  [play-clj "0.4.2"]]
   
   :source-paths ["src" "src-common"]
+  :java-source-paths ["src-java"]
   :javac-options ["-target" "1.6" "-source" "1.6" "-Xlint:-options"]
-  :aot [{{desktop-namespace}}]
-  :main {{desktop-namespace}})
+  :main {{package}}.Main)

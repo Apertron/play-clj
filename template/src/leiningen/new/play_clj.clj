@@ -14,6 +14,8 @@
         android-class-name "AndroidLauncher"
         ios-class-name "IOSLauncher"
         package-name (t/sanitize (t/multi-segment (or package-name name)))
+        java-package (clojure.string/replace package-name #"/" ".")
+        java-package-dir (clojure.string/replace package-name #"\." "/")
         package-prefix (->> (.lastIndexOf package-name ".")
                             (subs package-name 0))
         main-ns (t/sanitize-ns package-name)
@@ -23,6 +25,8 @@
         data {:app-name name
               :name (t/project-name name)
               :package package-name
+              :java-package java-package
+              :desktop-java-package-dir (str java-package-dir "/desktop-launcher/")
               :package-sanitized package-name
               :package-prefix package-prefix
               :desktop-class-name desktop-class-name
@@ -46,6 +50,7 @@
                ; desktop
                ["desktop/project.clj" (render "desktop-project.clj" data)]
                ["desktop/src-common/{{path}}.clj" (render "core.clj" data)]
+               ["desktop/src-java/{{desktop-java-package-dir}}/Main.java" (render "wrapper.java" data)]
                ["desktop/src/{{desktop-path}}.clj"
                 (render "desktop-launcher.clj" data)]
                "desktop/src-common"
